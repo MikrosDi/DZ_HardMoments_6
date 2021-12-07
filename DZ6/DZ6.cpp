@@ -4,7 +4,6 @@
 #include <random>
 #include <chrono>
 
-
 /*
   Задание 1.
  Создайте потокобезопасную оболочку для объекта cout. 
@@ -28,7 +27,8 @@ using namespace std;
 
 const vector<string> THINGS{ "Gold Coin", "Silver Coin", "Watch", "Trash", "Computer", "Videocard" };
 
-int getRandomNum(int min, int max) {
+int getRandomNum(int min, int max)
+{
     const static auto seed = chrono::system_clock::now().time_since_epoch().count();
     static mt19937_64 generator(seed);
     uniform_int_distribution<int> dis(min, max);
@@ -36,7 +36,8 @@ int getRandomNum(int min, int max) {
 }
 
 mutex m_pcout;
-void pcout(const string& text) {
+void pcout(const string& text)
+{
     m_pcout.lock();
     this_thread::sleep_for(chrono::duration<int, deci>(getRandomNum(10, 20)));
     cout << text << endl;
@@ -44,7 +45,8 @@ void pcout(const string& text) {
 }
 
 mutex m_simple;
-int FindSimple(int* counter, const int simple_number) {
+int FindSimple(int* counter, const int simple_number)
+{
     pcout("Calculate started");
     vector<int> simple_list{ 2 };
     simple_list.reserve(simple_number);
@@ -52,24 +54,32 @@ int FindSimple(int* counter, const int simple_number) {
     do {
         num += 2;
         bool b_is_simple = true;
-        for (auto simple : simple_list) {
-            if ((num % simple) == 0) {
+
+        for (auto simple : simple_list)
+        {
+            if ((num % simple) == 0) 
+            {
                 b_is_simple = false;
                 break;
             }
         }
-        if (b_is_simple) {
+
+        if (b_is_simple) 
+        {
             m_simple.lock();
             (*counter)++;
             m_simple.unlock();
             simple_list.push_back(num);
         }
+
     } while (*counter < simple_number);
     pcout(to_string(simple_list.at(simple_number - 1)));
+
     return simple_list.at(simple_number - 1);
 }
 
-void PrintProgress(const int* counter, const int simple_number) {
+void PrintProgress(const int* counter, const int simple_number)
+{
     do {
         m_simple.lock();
         pcout("Progress:" + to_string(*counter) + "/" + to_string(simple_number));
@@ -82,7 +92,8 @@ void PrintProgress(const int* counter, const int simple_number) {
 }
 
 mutex m_thief;
-void BringThingToHome(vector<pair<string, int>>* storage) {
+void BringThingToHome(vector<pair<string, int>>* storage)
+{
     int counter = 0;
     do {
         pair new_thing = { THINGS[getRandomNum(0, int(THINGS.size() - 1))], getRandomNum(0, 1000) };
@@ -92,31 +103,39 @@ void BringThingToHome(vector<pair<string, int>>* storage) {
         m_thief.unlock();
         this_thread::sleep_for(chrono::duration<int, deci>(1));
         counter++;
+
     } while (counter < 1000);
 }
 
-void StealThingFromHome(vector<pair<string, int>>* storage) {
+void StealThingFromHome(vector<pair<string, int>>* storage) 
+{
     this_thread::sleep_for(chrono::duration<int, deci>(150));
     int counter = 0;
     do {
         int highest_price_index = -1;
         m_thief.lock();
-        for (int i = 0; i < storage->size(); i++) {
-            if (highest_price_index == -1 || storage->at(i).second > storage->at(highest_price_index).second) {
+        for (int i = 0; i < storage->size(); i++)
+        {
+            if (highest_price_index == -1 || storage->at(i).second > storage->at(highest_price_index).second)
+            {
                 highest_price_index = i;
             }
         }
-        if (highest_price_index >= 0) {
+        if (highest_price_index >= 0)
+        {
             pcout("Steal thing:" + storage->at(highest_price_index).first + " with price:" + to_string(storage->at(highest_price_index).second));
             storage->erase(storage->begin() + highest_price_index);
         }
+
         m_thief.unlock();
         this_thread::sleep_for(chrono::duration<int, centi>(5));
         counter++;
+
     } while (counter < 500);
 }
 
-void T_One() {
+void T_One()
+{
     thread TP1{ pcout, "Test string number 1" };
     thread TP2{ pcout, "Test string number 2" };
     thread TP3{ pcout, "Test string number 3" };
@@ -125,7 +144,8 @@ void T_One() {
     TP3.join();
 }
 
-void T_Two() {
+void T_Two()
+{
     int progress = 1;
     int result;
     int simple_number;
@@ -138,7 +158,8 @@ void T_Two() {
  
 }
 
-void T_Free() {
+void T_Free()
+{
     vector<pair<string, int>> storage;
     thread host{ BringThingToHome, &storage };
     host.detach();
@@ -146,7 +167,8 @@ void T_Free() {
     thief.join();
 }
 
-int main() {
+int main()
+{
     cout << "\nTask 1: \n" << endl;
     T_One();
 
