@@ -116,16 +116,16 @@ void StealThingFromHome(vector<pair<string, int>>* storage) {
     } while (counter < 500);
 }
 
-void Task1() {
-    std::thread thread1{ pcout, "Test string1" };
-    std::thread thread2{ pcout, "Test string2" };
-    std::thread thread3{ pcout, "Test string3" };
+void T_One() {
+    thread thread1{ pcout, "Test string1" };
+    thread thread2{ pcout, "Test string2" };
+    thread thread3{ pcout, "Test string3" };
     thread1.join();
     thread2.join();
     thread3.join();
 }
 
-void Task2() {
+void T_Two() {
     int progress = 1;
     int result;
     int simple_number;
@@ -138,7 +138,7 @@ void Task2() {
  
 }
 
-void Task3() {
+void T_Free() {
     vector<pair<string, int>> storage;
     thread host{ BringThingToHome, &storage };
     host.detach();
@@ -148,13 +148,13 @@ void Task3() {
 
 int main() {
     cout << "\nTask 1: \n" << endl;
-    Task1();
+    T_One();
 
     cout << "\nTask 2: \n" << endl;
-    Task2();
+    T_Two();
 
     cout << "\nTask 3: \n" << endl;
-    Task3();
+    T_Free();
 
     return 0;
 }
