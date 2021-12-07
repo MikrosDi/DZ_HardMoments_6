@@ -117,12 +117,12 @@ void StealThingFromHome(vector<pair<string, int>>* storage) {
 }
 
 void T_One() {
-    thread thread1{ pcout, "Test string 1" };
-    thread thread2{ pcout, "Test string 2" };
-    thread thread3{ pcout, "Test string 3" };
-    thread1.join();
-    thread2.join();
-    thread3.join();
+    thread TP1{ pcout, "Test string number 1" };
+    thread TP2{ pcout, "Test string number 2" };
+    thread TP3{ pcout, "Test string number 3" };
+    TP1.join();
+    TP2.join();
+    TP3.join();
 }
 
 void T_Two() {
