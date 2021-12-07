@@ -111,7 +111,7 @@ void StealThingFromHome(vector<pair<string, int>>* storage) {
             storage->erase(storage->begin() + highest_price_index);
         }
         m_thief.unlock();
-        this_thread::sleep_for(std::chrono::duration<int, std::centi>(5));
+        this_thread::sleep_for(chrono::duration<int, centi>(5));
         counter++;
     } while (counter < 500);
 }
